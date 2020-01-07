@@ -18,12 +18,16 @@ let grid = [];
 let current;
 let stack = [];
 
-
 function setup() {
+	
+	frameRate(5);
+	loadJSON();
+	
   createCanvas(600, 600);
   cols = floor(width / w);
   rows = floor(height / w);
-
+  
+  
   for (let j = 0; j < rows; j++) {
     for (let i = 0; i < cols; i++) {
       var cell = new Cell(i, j);
@@ -35,7 +39,7 @@ function setup() {
 }
 
 function draw() {
-  background(60);
+  background(100);
   for (let i = 0; i < grid.length; i++) {
     grid[i].show();
   }
