@@ -13,15 +13,71 @@
 // https://en.wikipedia.org/wiki/Maze_generation_algorithm
 
 let cols, rows;
-let w = 600/20;
+let w = 600/25;
 let grid = [];
 let current;
 let stack = [];
 
+var maze_id;
+var allGameData = [];
+
+function StartNewGame()
+{
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() 
+	{
+    if (this.readyState == 4 && this.status == 200) 
+		{
+			maze_id = JSON.parse(this.responseText).maze_id;			
+			console.log(maze_id);
+		}
+    };
+  xhttp.open("POST", "https://ponychallenge.trustpilot.com/pony-challenge/maze", false);
+  xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+  xhttp.send(JSON.stringify({
+							"maze-width":25,
+							"maze-height":25,
+							"maze-player-name":"rainbow dash",
+							"difficulty":10
+}));
+  ShowGame();
+}
+
+function GetAllGameData()
+{
+	$.ajax({
+         url: 'https://ponychallenge.trustpilot.com/pony-challenge/maze/c92ef319-e520-4408-9500-6c482486f68b',
+         method: 'GET',
+         dataType: 'json',
+         contentType: 'application/json; charset=utf-8',        
+         success: function (data) {
+			 console.log(data);
+			 allGameData = data;         
+         },
+        fail : function( jqXHR, textStatus ) {
+          alert( "Request failed: " + textStatus );
+        }
+     })
+}
+
+function ShowGame(maze_id = "c92ef319-e520-4408-9500-6c482486f68b")
+{
+	console.log(maze_id);
+	 var xhttp = new XMLHttpRequest();
+	 xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+     document.getElementById("preview").innerHTML  = this.responseText;
+    }
+  };
+  xhttp.open("GET", "https://ponychallenge.trustpilot.com/pony-challenge/maze/"+maze_id+"/print", true);
+  xhttp.send();
+  GetAllGameData();
+  
+}
+
 function setup() {
 	
-	frameRate(5);
-	loadJSON();
+	frameRate(100);	
 	
   createCanvas(600, 600);
   cols = floor(width / w);
