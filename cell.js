@@ -15,7 +15,7 @@
 function Cell(i, j) {
   this.i = i;
   this.j = j;
-  this.walls = [true, true, true, true];
+  this.walls = [true, true];
   this.visited = false;
 
   this.checkNeighbors = function() {
